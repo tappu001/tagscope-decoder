@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TagScope Decoder</title>
+  <meta name="description" content="Decode any published Google Tag Manager container into readable tags, triggers, and variables, with audit findings.">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+  <header class="appbar">
+    <a class="brand" href="./" aria-label="TagScope Decoder home">
+      <img src="favicon.svg" alt="" width="28" height="28">
+      <span class="brand-name">TagScope Decoder</span>
+    </a>
+    <form id="decodeForm" class="searchbar" autocomplete="off" role="search">
+      <label for="q" class="sr-only">GTM ID, Google tag ID, website, or gtm.js URL</label>
+      <svg class="searchbar-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 9.5 16a6.5 6.5 0 0 0 4.2-1.6l.3.3v.8l5 5 1.5-1.5-5-5Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z"/></svg>
+      <input id="q" type="text" spellcheck="false" placeholder="GTM-XXXXXXX, G-XXXXXXXXXX, example.com, or a gtm.js URL">
+      <button type="submit" id="decodeBtn" class="btn-primary">Decode</button>
+    </form>
+    <div class="appbar-actions">
+      <button type="button" id="backendChip" class="backend-chip" title="How this app fetches gtm.js">
+        <span class="dot"></span><span class="label">Checking…</span>
+      </button>
+      <button type="button" class="icon-btn" id="pasteBtn" title="Paste gtm.js source" aria-label="Paste gtm.js source"></button>
+      <button type="button" class="icon-btn" id="settingsBtn" title="Settings" aria-label="Settings"></button>
+    </div>
+    <div class="progress" id="progress" hidden><span></span></div>
+  </header>
+
+  <div class="layout">
+    <nav class="sidenav" id="sidenav" aria-label="Container sections"></nav>
+    <main class="main" id="main">
+      <div id="notice" class="notice" role="status" aria-live="polite" hidden></div>
+      <div id="view"></div>
+    </main>
+  </div>
+
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="sheet" id="sheet" aria-modal="true" role="dialog" aria-labelledby="sheetTitle" hidden></aside>
+
+  <dialog id="pasteDialog" class="dialog">
+    <form method="dialog" class="dialog-body" id="pasteForm">
+      <h2>Paste gtm.js source</h2>
+      <p class="muted">In Chrome DevTools, open the Network tab, filter by <code>gtm.js</code>, click the request, open Response, select all, and copy. This works without any proxy.</p>
+      <textarea id="pasteText" spellcheck="false" placeholder="Paste the full gtm.js response here"></textarea>
+      <div class="dialog-row">
+        <label class="file-label">Or load a file <input type="file" id="pasteFile" accept=".js,.txt"></label>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn-text" data-close>Cancel</button>
+        <button type="submit" class="btn-primary" id="pasteGo">Decode source</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="settingsDialog" class="dialog">
+    <form method="dialog" class="dialog-body" id="settingsForm">
+      <h2>Settings</h2>
+
+      <fieldset class="field">
+        <legend>Naming style</legend>
+        <p class="muted small">GTM doesn't publish real names, so names are built from each item's settings.</p>
+        <label class="radio"><input type="radio" name="style" value="readable"> <span><b>Readable</b><br><span class="muted small">Meta Pixel - Purchase, Page View - Page Path contains /thank-you</span></span></label>
+        <label class="radio"><input type="radio" name="style" value="emdash"> <span><b>Em-dash (GTM Spy style)</b><br><span class="muted small">Meta Pixel — Purchase, Page View — Page Path contains /thank-you</span></span></label>
+        <label class="radio"><input type="radio" name="style" value="convention"> <span><b>Convention</b><br><span class="muted small">Meta - cHTML - Purchase, PV - Page Path contains /thank-you</span></span></label>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>Fetch proxy</legend>
+        <p class="muted small">Needed on the hosted version so the browser can read gtm.js. Paste your Cloudflare Worker URL (see DEPLOY.md). Leave empty when using the local server.</p>
+        <div class="inline">
+          <input type="url" id="proxyUrl" placeholder="https://tagscope-proxy.your-name.workers.dev">
+          <button type="button" class="btn-outline" id="testProxy">Test</button>
+        </div>
+        <p class="small" id="proxyResult"></p>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>Display</legend>
+        <label class="check"><input type="checkbox" id="showListeners"> Show GTM listener tags and listener-only triggers</label>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>Saved data</legend>
+        <p class="muted small">Version snapshots and recent searches stay in this browser only.</p>
+        <button type="button" class="btn-outline" id="clearSnaps">Clear saved snapshots</button>
+      </fieldset>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn-text" data-close>Cancel</button>
+        <button type="submit" class="btn-primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="report" class="report" aria-hidden="true"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/core/catalog.js"></script>
+  <script src="js/core/parser.js"></script>
+  <script src="js/core/naming.js"></script>
+  <script src="js/core/decoder.js"></script>
+  <script src="js/core/audit.js"></script>
+  <script src="js/core/sitescan.js"></script>
+  <script src="js/core/snapshots.js"></script>
+  <script src="js/core/scan.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/net.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
