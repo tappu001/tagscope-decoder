@@ -389,3 +389,26 @@ pre.raw-json { margin: 0; padding: 16px 20px; max-height: 72vh; overflow: auto; 
 }
 
 .card-head h2 .n { color: var(--text-2); font-weight: 400; font-size: 13px; margin-left: 8px; }
+
+/* ---------- branding ---------- */
+.brand-text { display: flex; flex-direction: column; line-height: 1.1; }
+.brand-by { font-size: 11px; color: var(--text-3); font-weight: 400; margin-top: 1px; }
+.by-line { margin: -12px 0 24px; font-size: 13.5px; color: var(--text-2); }
+.by-line a { color: var(--blue); text-decoration: none; }
+.by-line a:hover { text-decoration: underline; }
+
+.site-footer {
+  display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between;
+  padding: 16px 32px; border-top: 1px solid var(--line); background: var(--surface);
+  color: var(--text-2); font-size: 13px;
+}
+.site-footer strong { color: var(--text); font-weight: 500; }
+.site-footer .foot-links a { color: var(--blue); text-decoration: none; }
+.site-footer .foot-links a:hover { text-decoration: underline; }
+.site-footer .foot-sep { margin: 0 8px; color: var(--line); }
+
+@media (max-width: 860px) {
+  .brand-by { display: none; }
+  .site-footer { padding: 14px 16px; flex-direction: column; align-items: flex-start; gap: 4px; }
+}
+@media print { .site-footer { display: none !important; } }
