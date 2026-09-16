@@ -4,7 +4,7 @@ Decode any published Google Tag Manager container without account access. Enter 
 Google tag ID, a website, or paste a gtm.js file, and see every live tag, trigger, and variable
 laid out like the GTM interface, with audit findings and version-change tracking.
 
-Built by Tapasvi Dudhrejiya.
+Built by **Tapasvi Dudhrejiya** — [dudhrejiyatapasvi@gmail.com](mailto:dudhrejiyatapasvi@gmail.com) · [LinkedIn](https://www.linkedin.com/in/tapasvi-dudhrejiya/)
 
 ## Two ways to run it
 
