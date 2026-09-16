@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TagScope Decoder</title>
+  <title>TagScope Decoder — by Tapasvi Dudhrejiya</title>
+  <meta name="author" content="Tapasvi Dudhrejiya">
   <meta name="description" content="Decode any published Google Tag Manager container into readable tags, triggers, and variables, with audit findings.">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +16,10 @@
   <header class="appbar">
     <a class="brand" href="./" aria-label="TagScope Decoder home">
       <img src="favicon.svg" alt="" width="28" height="28">
-      <span class="brand-name">TagScope Decoder</span>
+      <span class="brand-text">
+        <span class="brand-name">TagScope Decoder</span>
+        <span class="brand-by">by Tapasvi Dudhrejiya</span>
+      </span>
     </a>
     <form id="decodeForm" class="searchbar" autocomplete="off" role="search">
       <label for="q" class="sr-only">GTM ID, Google tag ID, website, or gtm.js URL</label>
@@ -100,6 +104,15 @@
   </dialog>
 
   <div id="report" class="report" aria-hidden="true"></div>
+
+  <footer class="site-footer">
+    <span>TagScope Decoder — built by <strong>Tapasvi Dudhrejiya</strong></span>
+    <span class="foot-links">
+      <a href="mailto:dudhrejiyatapasvi@gmail.com">dudhrejiyatapasvi@gmail.com</a>
+      <span class="foot-sep">·</span>
+      <a href="https://www.linkedin.com/in/tapasvi-dudhrejiya/" target="_blank" rel="noopener">LinkedIn</a>
+    </span>
+  </footer>
 
   <script src="js/config.js"></script>
   <script src="js/core/catalog.js"></script>
