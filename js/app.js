@@ -178,6 +178,7 @@
       <section class="landing">
         <h1>Decode a GTM container</h1>
         <p class="lead">See every live tag, trigger, and variable in any published container, with the problems worth fixing. No account access needed.</p>
+        <p class="by-line">A tool by <a href="https://www.linkedin.com/in/tapasvi-dudhrejiya/" target="_blank" rel="noopener">Tapasvi Dudhrejiya</a> · <a href="mailto:dudhrejiyatapasvi@gmail.com">dudhrejiyatapasvi@gmail.com</a></p>
         <div class="ways">
           <div class="way"><h3>GTM container ID</h3><p>Decodes the live published version.</p><code>GTM-XXXXXXX</code></div>
           <div class="way"><h3>Website</h3><p>Finds every container on the page and checks for hardcoded tags.</p><code>example.com</code></div>
@@ -651,7 +652,7 @@
     const trigs = c.triggers.filter((t) => !t.isSystem);
     $('#report').innerHTML = `
       <h1>GTM audit: ${esc(c.containerId)}</h1>
-      <p class="meta">Live version ${esc(c.version)}. Decoded ${esc(new Date(c.fetchedAt).toLocaleString())} with TagScope Decoder. Names are generated from each item's settings.</p>
+      <p class="meta">Live version ${esc(c.version)}. Decoded ${esc(new Date(c.fetchedAt).toLocaleString())} with TagScope Decoder by Tapasvi Dudhrejiya (dudhrejiyatapasvi@gmail.com). Names are generated from each item's settings.</p>
       <h2>Summary</h2>
       <table><tbody>
         <tr><th>Tags</th><td>${c.summary.tags}</td><th>Triggers</th><td>${c.summary.triggers}</td><th>Variables</th><td>${c.summary.variables}</td></tr>
